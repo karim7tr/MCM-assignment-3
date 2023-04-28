@@ -1,0 +1,39 @@
+%% Modelling and Control of Manipulator assignment 3 - Exercise 1: Jacobian matrix
+numberOfLinks = 7;
+addpath('include');
+% The same model of assignment 2
+geom_model = BuildTree();
+linkType = zeros(numberOfLinks,1); % specify two possible link type: Rotational, Prismatic.
+bTi = zeros(4,4,numberOfLinks);% Trasformation matrix i-th link w.r.t. base
+jointType = zeros(7,1);
+% Initial joint configuration 
+q1 = [1.3,1.3,1.3,1.3,1.3,1.3,1.3];
+q2 = [1.3, 0.4, 0.1, 0, 0.5, 1.1, 0];
+q3 = [1.3, 0.1, 0.1, 1, 0.2, 0.3, 1.3];
+q4 = [2, 2, 2, 2, 2, 2, 2];
+% Compute direct geometry
+biTei1 = GetDirectGeometry(q1, geom_model, linkType)
+biTei2 = GetDirectGeometry(q2, geom_model, linkType)
+biTei3 = GetDirectGeometry(q3, geom_model, linkType)
+biTei4 = GetDirectGeometry(q4, geom_model, linkType)
+
+% Compute the transformation w.r.t. the base
+for i = 1:7
+    if (i==7)
+        bTe1(:,:,i) = GetTransformationWrtBase(biTei1, i) %we used if just to reveal final results not to get through every steps
+        bTe2(:,:,i) = GetTransformationWrtBase(biTei2, i)
+        bTe3(:,:,i) = GetTransformationWrtBase(biTei3, i)
+        bTe4(:,:,i) = GetTransformationWrtBase(biTei4, i)
+    else
+        bTe1(:,:,i) = GetTransformationWrtBase(biTei1, i); %hide steps
+        bTe2(:,:,i) = GetTransformationWrtBase(biTei2, i);
+        bTe3(:,:,i) = GetTransformationWrtBase(biTei3, i);
+        bTe4(:,:,i) = GetTransformationWrtBase(biTei4, i);
+    end
+end
+% computing end effector jacobian 
+
+J1 = GetJacobian(bTe_1,biTei_1)
+J2 = GetJacobian(bTe_2,biTei_2)
+J3 = GetJacobian(bTe_3,biTei_3)
+J4 = GetJacobian(bTe_4,biTei_4)
